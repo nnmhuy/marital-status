@@ -35,6 +35,12 @@ export default class App extends React.Component {
       this.setState({hadTable: true})
     }
     this.state.lists.push({id: this.state.lists.length + 1, marritalStatus: this.state.marritalStatus, firstDay: this.state.firstDay, lastDay: this.state.lastDay, name: this.state.name})
+    this.setState({
+      marritalStatus: "single",
+      name: "none",
+      firstDay: "none",
+      lastDay: "none"
+    })
   }
 
   render() {
