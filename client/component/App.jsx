@@ -1,50 +1,5 @@
 import React from 'react';
 
-function JustBrokeUp() {
-  return (
-    <div>
-      <div>
-        <span> His/Her Name: </span>
-        <input type="text"/>
-      </div>
-      <div>
-        <span> First Day Together: </span>
-        <input type="date"/>
-      </div>
-      <div>
-        <span> Last Day Together: </span>
-        <input type="date"/>
-      </div>
-    </div>
-  )
-}
-
-function NotSingle() {
-  return (
-    <div>
-      <div>
-        <span> His/Her Name: </span>
-        <input type="text" />
-      </div>
-      <div>
-        <span> First Day Together: </span>
-        <input type="date"/>
-      </div>
-    </div>
-  )
-}
-
-function AdditionalForm(props) {
-  const value = props.value;
-  if (value == "just broke up") {
-    return <JustBrokeUp />
-  }
-  if (value == "not single") {
-    return <NotSingle />
-  }
-  return null
-}
-
 function CreateTable(props) {
   if (!props.hadTable) return null;
   return (
@@ -61,32 +16,40 @@ function CreateTable(props) {
   )
 }
 
-let lists = [];
-
-
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectValue: "single",
-      hadTable: false
+      marritalStatus: "single",
+      hadTable: false,
+      name: "none",
+      firstDay: "none",
+      lastDay: "none",
+      lists: []
     }
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({selectValue: event.target.value})
   }
 
   handleSubmit() {
     if (!this.state.hadTable) {
       this.setState({hadTable: true})
     }
+    this.state.lists.push({id: this.state.lists.length + 1, marritalStatus: this.state.marritalStatus, firstDay: this.state.firstDay, lastDay: this.state.lastDay, name: this.state.name})
   }
 
   render() {
+    const content = this.state.lists.map((list) => 
+      <table key={this.state.list.id}>
+        <tbody>
+          <tr>
+            <td>{this.state.list.marritalStatus}</td>
+            <td>{this.state.list.firstDay}</td>
+            <td>{this.state.list.lastDay}</td>
+            <td>{this.state.list.name}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
     return (
       <div>
         <h1>Hello World</h1>
@@ -107,18 +70,53 @@ export default class App extends React.Component {
         </div>
         <div>
           <span> Marital Status </span>
-          <select value={this.state.selectValue} onChange={this.handleChange}>
+          <select value={this.state.marritalStatus} onChange={e => this.setState({marritalStatus: e.target.value})}>
             <option value="single">Single</option>
             <option value="not single">Married/In a relationship</option>
             <option value="just broke up">Just broke up</option>
           </select>
         </div>
-        <AdditionalForm value={this.state.selectValue} />
+        <div>
+          {this.state.marritalStatus == "just broke up" ? (
+            <div>
+              <div>
+                <span> His/Her Name: </span>
+                <input type="text" onChange={e => this.setState({name: e.target.value})} />
+              </div>
+              <div>
+                <span> First Day Together: </span>
+                <input type="date" onChange={e => this.setState({firstDay: e.target.value})} />
+              </div>
+              <div>
+                <span> Last Day Together: </span>
+                <input type="date" onChange={e => this.setState({lastDay: e.target.value})} />
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
+          {this.state.marritalStatus == "not single" ? (
+            <div>
+              <div>
+                <span> His/Her Name: </span>
+                <input type="text" onChange={e => this.setState({name: e.target.value})} />
+              </div>
+              <div>
+                <span> First Day Together: </span>
+                <input type="date" onChange={e => this.setState({firstDay: e.target.value})} />
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
         <button onClick={this.handleSubmit}>
           Submit 
         </button>
         <CreateTable hadTable={this.state.hadTable} />
-
+        <div>
+          {content}
+        </div>
       </div>
     );
   }
